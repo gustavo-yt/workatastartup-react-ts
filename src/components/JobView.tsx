@@ -1,6 +1,7 @@
+import * as _ from 'lodash';
+
 import DOMPurify from 'isomorphic-dompurify';
 import { HiArrowRight } from 'react-icons/hi';
-import _ from 'lodash';
 import { formatLocationWithWorkplace } from './JobPreview';
 import getSymbolFromCurrency from 'currency-symbol-map';
 

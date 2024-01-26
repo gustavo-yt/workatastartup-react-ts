@@ -1,7 +1,15 @@
 const config = {
     mode: 'production', // "production" | "development" | "none"
     resolve: {
-        extensions: ['*', '.mjs', '.js', '.json']
+        extensions: ['*', '.mjs', '.js', '.json'],
+        fallback: {
+            "fs": false,
+            "assert": false,
+            "crypto": false,
+            "util": false,
+            "stream": false,
+            "buffer": false,
+        },
     },
     module: {
         rules: [
