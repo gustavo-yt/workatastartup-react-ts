@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import JobSearch from './components/JobSearch';
+import _ from 'lodash';
 import { getHighlighter } from 'shikiji';
 import { getQuery } from './utils/database';
 import logo from './logo.svg';
@@ -22,7 +23,12 @@ function App() {
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const jobsData = await searchJobs();
+      const jobsData = await searchJobs(
+        DEFAULT_EMBEDDING_MODEL,
+        DEFAULT_LONG_INPUT,
+        DEFAULT_SHORT_INPUT,
+        ''
+      );      
       setJobs(jobsData);
     };
 
@@ -62,10 +68,29 @@ function App() {
 
 export default App;
 
-async function searchJobs(): Promise<any[]> {
+async function searchJobs( embeddingModel: string,
+  longInput: string,
+  shortInput: string,
+  country: string): Promise<any[]> {
   // Your searchJobs implementation
-  return new Promise((resolve) => {
-    resolve([]);
+  return new Promise(async (resolve) => {
+
+    const query = getQuery(embeddingModel, longInput, shortInput, country);
+
+    // Call localhost:8000 and pass the query to the API
+    const jobs = await fetch('http://localhost:8000', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(query),
+    }).then((res) => res.json());
+
+
+    return (jobs.rows as any[]).map((job) =>
+      _.mapKeys(job, (v, k) => _.camelCase(k))
+    ) as any[];
+
   })
 }
 

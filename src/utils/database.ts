@@ -6,7 +6,7 @@ export const getQuery = (
   shortInput: string,
   country: string
 ) => {
-  const indexes = { longInput: 0, shortInput: 0, country: 0 };
+  const indexes = { longInput: 0, shortInput: 0, country: 0 , embeddingModel: 0};
   const embeddingColumn = EMBEDDING_MODEL_TO_COLUMN[embeddingModel];
 
   const params: string[] = [];
@@ -21,6 +21,11 @@ export const getQuery = (
   if (country) {
     params.push(country);
     indexes.country = params.length;
+  }
+
+  if (embeddingModel) {
+    params.push(embeddingModel);
+    indexes.embeddingModel = params.length;
   }
 
   // Select
